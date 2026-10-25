@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#2563eb">
+<title>Nhận Key — GetKey</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#172554;background:#f4f8ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;flex-direction:column}.top{width:min(100% - 32px,900px);margin:auto;padding:20px 0;display:flex;justify-content:space-between;align-items:center}.brand{font-size:21px;font-weight:800}.brand b{color:#2563eb}.back{color:#1d4ed8;text-decoration:none;font-size:14px;font-weight:700}.main{width:min(100% - 28px,560px);margin:55px auto auto}.card{background:white;border:1px solid #dbeafe;border-radius:23px;padding:clamp(22px,5vw,34px);box-shadow:0 18px 50px #2563eb12}.tag{display:inline-block;background:#dbeafe;color:#1d4ed8;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:800}.card h1{font-size:30px;margin:15px 0 6px;letter-spacing:-.6px}.desc{color:#64748b;margin:0 0 22px;font-size:14px}.content-label{font-size:12px;color:#64748b;font-weight:800;letter-spacing:.6px;margin-bottom:8px}.content-box{width:100%;min-height:82px;max-height:210px;overflow:auto;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;padding:18px 16px;border:1px dashed #93c5fd;background:#f8fbff;border-radius:15px;color:#1e3a8a;font-size:20px;line-height:1.55;letter-spacing:.3px;font-family:Arial,Helvetica,sans-serif}.btn{width:100%;margin-top:13px;border:0;border-radius:13px;padding:13px 16px;background:#2563eb;color:white;font:700 15px Arial,Helvetica,sans-serif;cursor:pointer}.btn:disabled{opacity:.5;cursor:not-allowed}.status{font-size:13px;color:#64748b;margin-top:13px;white-space:pre-wrap}.status.error{color:#b91c1c}.footer{text-align:center;color:#94a3b8;font-size:12px;padding:28px 12px}
+</style></head>
+<body><header class="top"><div class="brand">Nhận Key<b>.</b></div><a class="back" href="index.html">← Quay lại</a></header>
+<main class="main"><section class="card"><span class="tag">HOÀN TẤT GETKEY</span><h1>Nội dung của bạn</h1><p class="desc">Nội dung do quản trị viên cài đặt sẽ hiển thị trong khung bên dưới.</p>
+<div class="content-label">KEY / NỘI DUNG</div><div class="content-box" id="contentBox">Đang tải nội dung…</div>
+<button class="btn" id="copyBtn" disabled>Sao chép</button><div class="status" id="status" role="status">Đang kết nối Supabase…</div></section></main><footer class="footer">GetKey · Nhận nội dung</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(()=>{'use strict';
+const URL='https://nsbasdfhgacwebbehlof.supabase.co',KEY='sb_publishable_Dfz-wfkWgJS-OjwmJ66DGQ_MsyURiat';
+const $=id=>document.getElementById(id);let sb,content='';
+function say(t,error=false){$('status').textContent=t;$('status').className='status'+(error?' error':'')}
+function wrapLongText(text,chunk=4){return String(text).split('\n').map(line=>{if(line.length<=chunk)return line;const parts=[];for(let i=0;i<line.length;i+=chunk)parts.push(line.slice(i,i+chunk));return parts.join('\n')}).join('\n')}
+async function load(){try{
+ const {data,error}=await sb.from('getkey_contents').select('id,content').eq('active',true);if(error)throw error;
+ if(!data||!data.length){$('contentBox').textContent='Chưa có nội dung được admin kích hoạt.';say('Quản trị viên cần thêm và bật nội dung trong bảng quản trị.');return}
+ const item=data[Math.floor(Math.random()*data.length)];content=String(item.content??'');$('contentBox').textContent=wrapLongText(content,4);$('copyBtn').disabled=!content;say('Đã tải nội dung từ Supabase.');
+}catch(e){$('contentBox').textContent='Không tải được nội dung.';say('Lỗi kết nối/cấu hình Supabase: '+(e.message||String(e)),true)}}
+$('copyBtn').onclick=async()=>{if(!content)return;try{await navigator.clipboard.writeText(content);say('Đã sao chép nội dung.')}catch(_){const ta=document.createElement('textarea');ta.value=content;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();say(ok?'Đã sao chép nội dung.':'Không thể sao chép tự động; hãy chọn nội dung để sao chép.',!ok)}};
+if(window.supabase?.createClient){sb=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true}});load()}else{$('contentBox').textContent='Không tải được thư viện Supabase.';say('Kiểm tra kết nối mạng.',true)}
+})();
+</script></body></html>

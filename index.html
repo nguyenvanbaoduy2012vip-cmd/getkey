@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#2563eb"><title>GetKey — Vuotlink404</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#172554;background:#f4f8ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;flex-direction:column}.top{max-width:980px;width:100%;margin:auto;padding:18px;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:800;font-size:21px}.brand b{color:#2563eb}.admin{background:#eaf2ff;color:#1d4ed8;border:1px solid #cfe0ff;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}.main{width:min(100% - 28px,650px);margin:48px auto auto}.card{background:white;border:1px solid #dbeafe;border-radius:24px;padding:clamp(22px,5vw,36px);box-shadow:0 18px 50px #2563eb12;text-align:center}.tag{display:inline-block;background:#dbeafe;color:#1d4ed8;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:800;letter-spacing:.5px}.card h1{font-size:clamp(30px,6vw,43px);letter-spacing:-1px;margin:17px 0 8px}.desc{color:#64748b;margin:0 auto 24px;max-width:450px}.keyname{font-size:14px;color:#64748b;margin-bottom:12px}.primary{width:100%;background:#2563eb;color:white;border:0;border-radius:14px;padding:15px;font-weight:800;font-size:16px;cursor:pointer}.primary:hover{background:#1d4ed8}.status{font-size:13px;color:#64748b;margin-top:14px;min-height:20px}.footer{text-align:center;color:#94a3b8;font-size:12px;padding:28px 12px}.modal{position:fixed;inset:0;background:#0f172a88;display:flex;align-items:center;justify-content:center;padding:16px}.modal[hidden]{display:none}.dialog{background:#fff;border-radius:20px;padding:24px;width:min(100%,430px)}.dialog h2{margin:0 0 15px}.field{display:grid;gap:6px;margin:12px 0;text-align:left}.field label{font-size:13px;font-weight:700}.field input{padding:12px;border:1px solid #cbd5e1;border-radius:11px;font:inherit}.secondary{background:#eaf2ff;color:#1d4ed8;border:0;border-radius:11px;padding:11px 14px;cursor:pointer;font-weight:700}.row{display:flex;gap:8px}.row button{flex:1}.msg{font-size:13px;white-space:pre-wrap;color:#1d4ed8;margin-top:12px}.msg.error{color:#b91c1c}.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{flex:1;border:0;padding:10px;border-radius:10px;cursor:pointer;background:#f1f5f9}.tabs button.active{background:#dbeafe;color:#1d4ed8;font-weight:700}.hidden{display:none!important}
+</style></head>
+<body>
+<header class="top"><div class="brand">GetKey<b>.</b></div><button class="admin" id="adminOpen">Quản trị</button></header>
+<main class="main"><section class="card">
+<span class="tag">GETKEY NHANH CHÓNG</span><h1>Nhận Key của bạn</h1>
+<p class="desc">Nhấn nút bên dưới để tiếp tục qua Vuotlink404. Sau khi hoàn tất, bạn sẽ được chuyển tới trang nhận nội dung.</p>
+<div class="keyname">LIÊN KẾT GETKEY</div>
+<button class="primary" id="getKey">Getkey qua vuotlink404</button>
+<div class="status" id="status" role="status">Đang kết nối Supabase…</div>
+</section></main><section id="adminPanel" class="main" hidden style="margin-top:24px">
+<div class="card" style="text-align:left"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h2 style="margin:0">Bảng quản trị</h2><button class="admin" id="hideAdmin">Đóng</button></div>
+<p class="status" id="adminStatus">Đang tải...</p>
+<div class="field"><label for="keyUrl">Liên kết Vuotlink404 / GetKey</label><input id="keyUrl" type="url" placeholder="https://..."></div><button class="primary" id="saveUrl">Lưu liên kết</button>
+<hr style="border:0;border-top:1px solid #dbeafe;margin:24px 0">
+<h3>Thêm nội dung</h3><div class="field"><label for="newContent">Nội dung</label><textarea id="newContent" style="width:100%;min-height:95px;padding:12px;border:1px solid #cbd5e1;border-radius:11px;font:inherit"></textarea></div><label style="display:flex;gap:8px;align-items:center;margin:10px 0"><input id="newActive" type="checkbox" checked> Kích hoạt nội dung</label><button class="primary" id="addContent">Thêm nội dung</button>
+<h3 style="margin-top:24px">Kho nội dung</h3><div id="contentsList"></div>
+<h3 style="margin-top:24px">Duyệt tài khoản</h3><div id="usersList"></div>
+</div></section><footer class="footer">GetKey · Vuotlink404</footer>
+<div class="modal" id="authModal" hidden><section class="dialog">
+<div style="display:flex;justify-content:space-between;align-items:center"><h2>Quản trị GetKey</h2><button class="secondary" id="closeModal">Đóng</button></div>
+<div id="signedOut"><div class="tabs"><button id="loginTab" class="active">Đăng nhập</button><button id="signupTab">Đăng ký</button></div>
+<form id="authForm"><div class="field"><label>Email</label><input id="email" type="email" required autocomplete="email"></div><div class="field"><label>Mật khẩu</label><input id="password" type="password" minlength="6" required autocomplete="current-password"></div><button class="primary" id="submitAuth">Đăng nhập</button></form></div>
+<div id="signedIn" class="hidden"><p id="accountText"></p><div class="row"><button class="primary" id="openAdmin">Mở quản trị</button><button class="secondary" id="logout">Đăng xuất</button></div></div><div id="authMsg" class="msg"></div>
+</section></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(()=>{'use strict';
+const URL='https://nsbasdfhgacwebbehlof.supabase.co',KEY='sb_publishable_Dfz-wfkWgJS-OjwmJ66DGQ_MsyURiat';
+const FIRST_ADMIN_EMAIL='replace-with-your-admin-email@example.com'; // Thay bằng email admin đầu tiên.
+const $=id=>document.getElementById(id);let sb,user,signup=false,profile=null;
+const say=(t,err=false)=>{$('status').textContent=t;$('status').style.color=err?'#b91c1c':'#64748b'};
+const authSay=(t,err=false)=>{$('authMsg').textContent=t;$('authMsg').className='msg'+(err?' error':'')};
+const isBootstrap=()=>user&&FIRST_ADMIN_EMAIL!=='replace-with-your-admin-email@example.com'&&user.email.toLowerCase()===FIRST_ADMIN_EMAIL.toLowerCase();
+async function loadProfile(){profile=null;if(!user)return;const {data,error}=await sb.from('getkey_profiles').select('id,email,role,approved').eq('id',user.id).maybeSingle();if(error){console.warn(error.message);return}profile=data;if(!data){const r=await sb.from('getkey_profiles').insert({id:user.id,email:user.email||'',role:'user',approved:false});if(r.error)console.warn(r.error.message);else{const q=await sb.from('getkey_profiles').select('id,email,role,approved').eq('id',user.id).maybeSingle();profile=q.data||null}}}
+async function updateAuthUI(){const signed=!!user;$('signedOut').classList.toggle('hidden',signed);$('signedIn').classList.toggle('hidden',!signed);if(signed){$('accountText').textContent=user.email+' · '+((isBootstrap()||(profile&&profile.role==='admin'&&profile.approved))?'Có quyền quản trị':'Đang chờ xét duyệt');$('openAdmin').disabled=!(isBootstrap()||(profile&&profile.role==='admin'&&profile.approved));}}
+async function readLink(){const {data,error}=await sb.from('getkey_settings').select('value').eq('key','getkey_url').maybeSingle();if(error)throw error;return data&&typeof data.value==='string'?data.value:''}
+$('getKey').onclick=async()=>{const b=$('getKey');b.disabled=true;say('Đang lấy liên kết…');try{const link=await readLink();if(!/^https?:\/\//i.test(link))throw Error('Admin chưa cài URL Vuotlink404 hợp lệ.');location.href=link;}catch(e){say('Không thể tiếp tục: '+e.message,true)}finally{b.disabled=false}};
+$('adminOpen').onclick=async()=>{$('authModal').hidden=false;const {data}=await sb.auth.getSession();user=data.session?.user||null;if(user)await loadProfile();await updateAuthUI()};
+$('closeModal').onclick=()=>$('authModal').hidden=true;
+function mode(s){signup=s;$('loginTab').classList.toggle('active',!s);$('signupTab').classList.toggle('active',s);$('submitAuth').textContent=s?'Đăng ký':'Đăng nhập';$('password').autocomplete=s?'new-password':'current-password';authSay('')}
+$('loginTab').onclick=()=>mode(false);$('signupTab').onclick=()=>mode(true);
+$('authForm').onsubmit=async e=>{e.preventDefault();$('submitAuth').disabled=true;try{const email=$('email').value.trim(),password=$('password').value;if(signup){const {data,error}=await sb.auth.signUp({email,password});if(error)throw error;user=data.user;if(data.session&&user){await loadProfile();await updateAuthUI();authSay('Đã tạo tài khoản. Tài khoản mới mặc định chờ duyệt.')}else authSay('Đã gửi đăng ký. Hãy xác minh email nếu được yêu cầu; tài khoản vẫn cần xét duyệt.')}else{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;user=data.user;await loadProfile();await updateAuthUI();authSay('Đăng nhập thành công.')}}catch(e){authSay(e.message||String(e),true)}finally{$('submitAuth').disabled=false}};
+$('logout').onclick=async()=>{const {error}=await sb.auth.signOut();if(error)authSay(error.message,true)};
+
+async function adminAllowed(){return !!(isBootstrap()||(profile&&profile.role==='admin'&&profile.approved===true))}
+async function adminLoad(){
+ const panel=$('adminPanel');panel.hidden=false;$('adminStatus').textContent='Đang tải dữ liệu quản trị…';
+ try{
+  const [setting,contents,users]=await Promise.all([
+   sb.from('getkey_settings').select('value').eq('key','getkey_url').maybeSingle(),
+   sb.from('getkey_contents').select('id,content,active,created_at').order('created_at',{ascending:false}),
+   sb.from('getkey_profiles').select('id,email,role,approved,created_at').order('created_at',{ascending:false})
+  ]);
+  if(setting.error)throw setting.error;if(contents.error)throw contents.error;if(users.error)throw users.error;
+  $('keyUrl').value=setting.data?.value||'';
+  const croot=$('contentsList');croot.replaceChildren();
+  (contents.data||[]).forEach(item=>{
+   const box=document.createElement('div');box.style.cssText='border:1px solid #dbeafe;border-radius:12px;padding:12px;margin:8px 0;overflow-wrap:anywhere';
+   const txt=document.createElement('div');txt.textContent=item.content;box.appendChild(txt);
+   const meta=document.createElement('p');meta.className='status';meta.textContent=item.active?'Đang hoạt động':'Đã tắt';box.appendChild(meta);
+   const toggle=document.createElement('button');toggle.className='secondary';toggle.textContent=item.active?'Tắt':'Bật';toggle.onclick=async()=>{const r=await sb.from('getkey_contents').update({active:!item.active}).eq('id',item.id);if(r.error)alert(r.error.message);else adminLoad()};
+   const edit=document.createElement('button');edit.className='secondary';edit.style.marginLeft='6px';edit.textContent='Sửa';edit.onclick=async()=>{const v=prompt('Sửa nội dung',item.content);if(v===null)return;if(!v.trim())return alert('Nội dung không được để trống');const r=await sb.from('getkey_contents').update({content:v.trim()}).eq('id',item.id);if(r.error)alert(r.error.message);else adminLoad()};
+   const del=document.createElement('button');del.className='secondary';del.style.cssText='margin-left:6px;color:#b91c1c';del.textContent='Xóa';del.onclick=async()=>{if(!confirm('Xóa nội dung này?'))return;const r=await sb.from('getkey_contents').delete().eq('id',item.id);if(r.error)alert(r.error.message);else adminLoad()};
+   box.append(toggle,edit,del);croot.appendChild(box)
+  });
+  const uroot=$('usersList');uroot.replaceChildren();
+  (users.data||[]).forEach(u=>{
+   const box=document.createElement('div');box.style.cssText='border:1px solid #dbeafe;border-radius:12px;padding:12px;margin:8px 0;overflow-wrap:anywhere';
+   const line=document.createElement('div');line.textContent=(u.email||u.id)+' — '+u.role+' — '+(u.approved?'Đã duyệt':'Chờ duyệt');box.appendChild(line);
+   const approve=document.createElement('button');approve.className='secondary';approve.style.marginTop='8px';approve.textContent=u.approved?'Bỏ duyệt':'Duyệt';approve.onclick=async()=>{const r=await sb.from('getkey_profiles').update({approved:!u.approved}).eq('id',u.id);if(r.error)alert(r.error.message);else adminLoad()};
+   const role=document.createElement('button');role.className='secondary';role.style.margin='8px 0 0 6px';role.textContent=u.role==='admin'?'Hạ quyền admin':'Cấp admin';role.onclick=async()=>{if(!confirm('Thay đổi vai trò tài khoản này?'))return;const r=await sb.from('getkey_profiles').update({role:u.role==='admin'?'user':'admin'}).eq('id',u.id);if(r.error)alert(r.error.message);else adminLoad()};
+   box.append(approve,role);uroot.appendChild(box)
+  });
+  $('adminStatus').textContent='Đã tải. Mọi thao tác vẫn phải được RLS cho phép.';
+ }catch(e){$('adminStatus').textContent='Không tải được dữ liệu quản trị: '+(e.message||String(e))}
+}
+$('openAdmin').onclick=async()=>{if(!(await adminAllowed())){authSay('Tài khoản chưa được cấp quyền quản trị.',true);return}$('authModal').hidden=true;await adminLoad();window.scrollTo({top:$('adminPanel').offsetTop,behavior:'smooth'})};
+$('hideAdmin').onclick=()=>$('adminPanel').hidden=true;
+$('saveUrl').onclick=async()=>{const url=$('keyUrl').value.trim();if(!/^https?:\\/\\//i.test(url)){ $('adminStatus').textContent='Nhập URL http/https hợp lệ.';return}const r=await sb.from('getkey_settings').upsert({key:'getkey_url',value:url,updated_at:new Date().toISOString()},{onConflict:'key'});$('adminStatus').textContent=r.error?'Không lưu được: '+r.error.message:'Đã lưu liên kết. Hãy cấu hình dịch vụ Vuotlink404 để redirect về nhanma.html.'};
+$('addContent').onclick=async()=>{const content=$('newContent').value.trim();if(!content){$('adminStatus').textContent='Nhập nội dung trước.';return}const r=await sb.from('getkey_contents').insert({content,active:$('newActive').checked});if(r.error){$('adminStatus').textContent='Không thêm được: '+r.error.message;return}$('newContent').value='';await adminLoad()};
+
+
+if(window.supabase?.createClient){sb=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});readLink().then(v=>say(v?'Đã kết nối Supabase.':'Admin chưa cấu hình liên kết GetKey.')).catch(e=>say('Chưa thể đọc cấu hình Supabase: '+e.message,true));sb.auth.getSession().then(async({data})=>{user=data.session?.user||null;if(user){await loadProfile();await updateAuthUI()}});sb.auth.onAuthStateChange((_e,s)=>{user=s?.user||null;if(!user)profile=null;Promise.resolve().then(async()=>{if(user)await loadProfile();await updateAuthUI()})})}else say('Không tải được thư viện Supabase.',true);
+})();
+</script></body></html>
