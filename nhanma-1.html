@@ -20,7 +20,7 @@ function wrapLongText(text,chunk=4){return String(text).split('\n').map(line=>{i
 async function load(){try{
  const {data,error}=await sb.from('getkey_contents').select('id,content').eq('active',true);if(error)throw error;
  if(!data||!data.length){$('contentBox').textContent='Chưa có nội dung được admin kích hoạt.';say('Quản trị viên cần thêm và bật nội dung trong bảng quản trị.');return}
- const item=data[Math.floor(Math.random()*data.length)];content=String(item.content??'');$('contentBox').textContent=wrapLongText(content,4);$('copyBtn').disabled=!content;say('Đã tải nội dung từ Supabase.');
+ const item=data[Math.floor(Math.random()*data.length)];content=String(item.content??'');$('contentBox').textContent=content;$('copyBtn').disabled=!content;say('Đã tải nội dung từ Supabase.');
 }catch(e){$('contentBox').textContent='Không tải được nội dung.';say('Lỗi kết nối/cấu hình Supabase: '+(e.message||String(e)),true)}}
 $('copyBtn').onclick=async()=>{if(!content)return;try{await navigator.clipboard.writeText(content);say('Đã sao chép nội dung.')}catch(_){const ta=document.createElement('textarea');ta.value=content;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();say(ok?'Đã sao chép nội dung.':'Không thể sao chép tự động; hãy chọn nội dung để sao chép.',!ok)}};
 if(window.supabase?.createClient){sb=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true}});load()}else{$('contentBox').textContent='Không tải được thư viện Supabase.';say('Kiểm tra kết nối mạng.',true)}
